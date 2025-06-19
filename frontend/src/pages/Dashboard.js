@@ -104,9 +104,9 @@ const Dashboard = () => {
         },
         {
             title: "Affected",
-            dataIndex: "isAffected",
-            key: "isAffected",
-            render: (isAffected) => isAffected ? "Yes" : "No"
+            dataIndex: "is_affected",
+            key: "is_affected",
+            render: (is_affected) => is_affected ? "Yes" : "No"
         },
         {
             title: "Action",
@@ -114,13 +114,13 @@ const Dashboard = () => {
             render: (text, record) => (
                 <Space>
                     { 
-                        record.isAffected === true ? (
+                        record.is_affected === true ? (
                             <>
                                 <Tooltip title="View">
                                     <Button 
                                         type="primary" 
                                         icon={<EyeOutlined />}
-                                        onClick={() => handleShow(record.id, record.claim_no)}
+                                        onClick={() => handleShow(record.id, record.number)}
                                     />
                                             
                                 </Tooltip>
@@ -129,17 +129,17 @@ const Dashboard = () => {
                                         type="primary"
                                         style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }} 
                                         icon={<EditOutlined />}
-                                        onClick={() => handleEdit(record.id, record.claim_no)}
+                                        onClick={() => handleEdit(record.id, record.number)}
                                     />
                                 </Tooltip>
                             </>
-                        ) : record.isAffected === false ? (
+                        ) : record.is_affected === false ? (
                             <Tooltip title="Affected">
                                 <Button 
                                     type="primary"
                                     style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }} 
                                     icon={<FormOutlined />} 
-                                    onClick={() => handleAffectation(record.id, record.claim_no)}
+                                    onClick={() => handleAffectation(record.id, record.number)}
                                 />
                             </Tooltip>
                         ) : null

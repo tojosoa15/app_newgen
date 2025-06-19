@@ -1,8 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Form, Input, Button, Select } from "antd";
 
+import axios from "axios";
+
 const AffectationFormModal = ({ visible, onClose, claimNo }) => {
-    const [form] = Form.useForm();
+    const [form]                = Form.useForm();
+    const [roles, setRoles]     = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchRoles = async () => {
+            try {
+                const response = await axios.get("/api/roles");
+                setRoles(response.data.map(role => ({
+                    value: role.id,
+                    label: role.role_name
+                })));
+            } catch (err) {
+                // setError("Failed to load roles");
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRoles();
+    }, []);
 
     const handleCancel = () => {
         form.resetFields();
@@ -48,63 +71,16 @@ const AffectationFormModal = ({ visible, onClose, claimNo }) => {
                     </div>
                 </Form.Item>
 
-                {/* SurveyorField  */}
-                {/* <Form.Item
-                    label="Surveyor"
-                    name="surveyor"
-                >
-                    <Select
-                        placeholder="Select a surveyor"
-                        options={[
-                            { value: 1, label: 'Tojosoa' },
-                            { value: 2, label: 'René' },
-                            { value: 3, label: 'Raharison' },
-                        ]}
-                    />
-                </Form.Item> */}
-
-                {/* GarageField  */}
-                {/* <Form.Item
-                    label="Garage"
-                    name="garage"
-                >
-                    <Select
-                        placeholder="Select a garage"
-                        options={[
-                            { value: 1, label: 'Lucas' },
-                            { value: 2, label: 'Tinah' },
-                            { value: 3, label: 'Mathieu' },
-                        ]}
-                    />
-                </Form.Item> */}
-
-                {/* SparePartField  */}
-                {/* <Form.Item
-                    label="Spare Part"
-                    name="spare_part"
-                >
-                    <Select
-                        placeholder="Select a spare part"
-                        options={[
-                            { value: 1, label: 'SP 1' },
-                            { value: 2, label: 'SP 2' },
-                            { value: 3, label: 'SP 3' },
-                        ]}
-                    />
-                </Form.Item> */}
-
                 {/* Modifier le formulaire en fonctin de rôle */}
                 <Form.Item
                     label="Rôle"
                     name="role"
                 >
-                <Select
-                    placeholder="Choose a role"
-                    options={[
-                        { value: 1, label: 'Surveyor' },
-                        { value: 2, label: 'Garage' }, // J'ai corrigé "Gagare" en "Garage"
-                        { value: 3, label: 'Spare part' },
-                    ]}
+               <Select
+                    placeholder={loading ? "Chargement..." : "Choose a role"}
+                    loading={loading}
+                    options={roles}
+                    disabled={loading}
                 />
                 </Form.Item>
 
